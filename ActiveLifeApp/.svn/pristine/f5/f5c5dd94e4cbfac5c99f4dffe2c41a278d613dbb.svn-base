@@ -1,0 +1,47 @@
+//
+//  FBFriendlistBO.h
+//  SbScribe
+//
+//  Created by Ramesh on 18/05/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface FBFriendlistBO : NSObject
+{
+//    NSString *strfriendId;
+//    NSString *strFriendName;
+//    NSString *strFriendImageUrl;
+//    NSString *strBirthDay;
+//    UIImage *imageEvent;
+//    NSString *EventImage;
+    NSString *first_name;
+    NSString *fbID;
+    NSString *last_name;
+    NSString *name;
+    NSString *username;
+    UIImage *imageEvent;
+    NSString *strFriendImageUrl;
+//    NSString *EventImage;
+}
+
+@property (nonatomic, retain)NSString *first_name;
+@property (nonatomic, retain)NSString *id;
+@property (nonatomic, retain)NSString *last_name;
+@property (nonatomic, retain)NSString *name;
+@property (nonatomic, retain)NSString *username;
+
+//@property (nonatomic, retain) NSString *strfriendId;
+//@property (nonatomic, retain) NSString *strFriendName;
+@property (nonatomic, retain) NSString *strFriendImageUrl;
+//@property (nonatomic, retain) NSString *strBirthDay; 
+//@property(nonatomic,retain) NSString *EventImage;
+@property (nonatomic, retain) UIImage *imageEvent;
+
+- (UIImage *)image1;
+- (void)setImage:(UIImage *)image;
+-(void)downloadImage;
+
+
+@end

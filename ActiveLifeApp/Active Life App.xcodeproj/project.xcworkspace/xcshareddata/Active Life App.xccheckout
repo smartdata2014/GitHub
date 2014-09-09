@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>0F15B65F-F685-4498-8D36-76822CAB56FC</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Active Life App</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>1AB0F2F7-6E71-42F6-8D83-F55811881951</key>
+		<string>http://172.10.1.5/repository/ios/hifikiddo_ios/hifikiddo_iossvn/HiFiKiddo/SDWebImage</string>
+		<key>438402E9-467F-4443-B823-AB7597F2482C</key>
+		<string>http://172.10.1.9:3690/svn/activelifeapp</string>
+		<key>59612BA3-46A2-4B5E-A127-1476F1B284D8</key>
+		<string>http://172.10.1.5/repository/ios/therapist/therapistsvn/SVProgressHUD/SVProgressHUD.bundle</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Active Life App.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>1AB0F2F7-6E71-42F6-8D83-F55811881951</key>
+		<string>../../Active Life App/SDWebImage</string>
+		<key>438402E9-467F-4443-B823-AB7597F2482C</key>
+		<string>../..</string>
+		<key>59612BA3-46A2-4B5E-A127-1476F1B284D8</key>
+		<string>../../Active Life App/SVProgressHUD.bundle</string>
+	</dict>
+	<key>IDESourceControlProjectRepositoryRootDictionary</key>
+	<dict>
+		<key>1AB0F2F7-6E71-42F6-8D83-F55811881951</key>
+		<string>http://172.10.1.5/repository/ios/hifikiddo_ios</string>
+		<key>438402E9-467F-4443-B823-AB7597F2482C</key>
+		<string>http://172.10.1.9:3690/svn/activelifeapp</string>
+		<key>59612BA3-46A2-4B5E-A127-1476F1B284D8</key>
+		<string>http://172.10.1.5/repository/ios/therapist</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>http://172.10.1.9:3690/svn/activelifeapp/Active%20Life%20App.xcodeproj</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>438402E9-467F-4443-B823-AB7597F2482C</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.subversion</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>438402E9-467F-4443-B823-AB7597F2482C</string>
+			<key>IDESourceControlWCCName</key>
+			<string>activelifeapp</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.subversion</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>1AB0F2F7-6E71-42F6-8D83-F55811881951</string>
+			<key>IDESourceControlWCCName</key>
+			<string>SDWebImage</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.subversion</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>59612BA3-46A2-4B5E-A127-1476F1B284D8</string>
+			<key>IDESourceControlWCCName</key>
+			<string>SVProgressHUD.bundle</string>
+		</dict>
+	</array>
+</dict>
+</plist>

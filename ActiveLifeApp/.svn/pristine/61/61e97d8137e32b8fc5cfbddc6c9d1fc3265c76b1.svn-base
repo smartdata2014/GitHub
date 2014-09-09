@@ -1,0 +1,201 @@
+//
+//  MyFriendsListViewController.m
+//  Active Life App
+//
+//  Created by sdnmacmini10 on 29/08/14.
+//  Copyright (c) 2014 sdnmacmini10. All rights reserved.
+//
+
+#import "MyFriendsListViewController.h"
+
+@interface MyFriendsListViewController ()
+{
+    IBOutlet UITableView *friendsTableView;
+    IBOutlet UITextField *txtSearch;
+}
+@property (nonatomic, strong) NSMutableArray *responseArr;
+@property (nonatomic, strong) NSMutableArray *searchArr;
+
+-(IBAction)btnMenuPressed:(id)sender;
+-(IBAction)btnLogOutPressed:(id)sender;
+-(void)fetchFriendsListForSearchText :(NSString *)SearchText;
+@end
+
+@implementation MyFriendsListViewController
+bool search=0;
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    self.navigationController.navigationBarHidden = YES;
+    //    _responseArr = [[NSMutableArray alloc] init];
+    _searchArr = [[NSMutableArray alloc] init];
+    [self fetchFriendsListForSearchText:@""];
+    // Do any additional setup after loading the view.
+}
+
+#pragma mark - General Button Actions
+
+-(IBAction)btnMenuPressed:(id)sender{
+    [txtSearch resignFirstResponder];
+    SWRevealViewController *revealController = [self revealViewController];
+    [revealController revealToggle:nil];
+}
+
+-(IBAction)btnLogOutPressed:(id)sender{
+    UINavigationController *navController =(UINavigationController *) [UIApplication sharedApplication].keyWindow.rootViewController;
+    [navController popViewControllerAnimated:YES];
+}
+
+#pragma mark - Table View Delegate Methods
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 64.0;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [_responseArr count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"SearchCell";
+    UITableViewCell *cell;
+    
+    if (cell==nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    }
+    
+//  cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    
+    UILabel *labelName = [[UILabel alloc] initWithFrame:CGRectMake(70, 22, 180, 20)];
+    labelName.font = [UIFont fontWithName:@"Helvetica Light" size:13.0];
+    labelName.text = [[_responseArr objectAtIndex:indexPath.row] valueForKey:@"username"];
+    [cell.contentView addSubview:labelName];
+    
+    UIImageView *friendImageView = [[UIImageView alloc] initWithFrame: CGRectMake(10, 16, 30, 30)];
+    friendImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[[_responseArr objectAtIndex:indexPath.row] valueForKey:@"profile_picture"]]]];
+    [cell.contentView addSubview:friendImageView];
+    
+    UIButton *buttonAdd = [[UIButton alloc] initWithFrame:CGRectMake(250,20,25,24)];
+    buttonAdd.backgroundColor = [UIColor redColor];
+    buttonAdd.tag = [[_responseArr objectAtIndex:indexPath.row] valueForKey:@"user_id"];
+    [cell.contentView addSubview:buttonAdd];
+    
+    return cell;
+}
+
+//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+//    EventDetailsViewController *eventDetailsViewController = [[AppDelegate storyBoard] instantiateViewControllerWithIdentifier:@"EventDetailsViewController"];
+//    eventDetailsViewController.eventId = [[search?_searchArr:_responseArr objectAtIndex:indexPath.row] valueForKey:@"event_id"];
+//    [self.navigationController pushViewController:eventDetailsViewController animated:YES];
+//}
+
+#pragma mark -  Add as a friend button action
+
+-(void)btnAddFriendPressed: (id)sender{
+    NSLog(@"sender tag...%i",[sender tag]);
+}
+
+#pragma mark - Textfield Delegate Methods
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    NSLog(@"searchText..%@",string);
+    NSString *searchStr;
+    
+    if (string.length == 0) {
+        searchStr = [textField.text substringWithRange: NSMakeRange (0, textField.text.length-1)];
+    }
+    else{
+        searchStr = [NSString stringWithFormat:@"%@%@",textField.text,string];
+    }
+    
+    search = searchStr.length ?1:0;
+//    NSPredicate *predicate;
+    [self fetchFriendsListForSearchText:searchStr];
+//    if ([segmentControl selectedSegmentIndex]==0) {
+//        predicate = [NSPredicate predicateWithFormat:@"SELF.friends_name beginswith[cd] %@",searchStr];
+//    }
+//    else{
+//        predicate = [NSPredicate predicateWithFormat:@"SELF.event_location beginswith[cd] %@",searchStr];
+//    }
+    
+//    NSArray *tempArray = [_responseArr filteredArrayUsingPredicate:predicate];
+//    _searchArr = [NSMutableArray arrayWithArray:tempArray];
+//    [friendsTableView reloadData];
+    return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    textField.text = @"";
+    [textField resignFirstResponder];
+    search = 0;
+    [friendsTableView reloadData];
+    return YES;
+}
+
+#pragma mark - Call Webservice for Searching
+
+-(void)fetchFriendsListForSearchText :(NSString *)SearchText{
+    
+    NSMutableDictionary *postDict = [[NSMutableDictionary alloc] init];
+    [postDict setObject:SearchText forKey:@"friend_keyword"];
+    [postDict setObject:KAPI_KEY forKey:@"api_key"];
+    [postDict setObject:[AppDelegate getCurrentTimeStamp] forKey:@"timestamp"];
+    [postDict setObject:[AppDelegate hmacSHA256:KSECRET_KEY forKeyValue:[NSString stringWithFormat:@"%@%@",KAPI_KEY,[AppDelegate getCurrentTimeStamp]]] forKey:@"signature"];
+    
+    WebserviceCall *webserviceCall = [[WebserviceCall alloc] init];
+    webserviceCall.delegate = self;
+    [webserviceCall callWebserviceWithIdentifier:@"SearchUserFriends" andArguments:postDict];
+
+}
+
+#pragma mark - Webservice Call Delegate Methods
+
+-(void)webRequestFinished:(id)sender forTag:(int)Tag{
+    _responseArr = [[NSMutableArray alloc] init];
+    if ([[sender valueForKey:@"status"] isEqualToString:@"1"]) {
+        [_responseArr addObjectsFromArray:[sender valueForKey:@"users"]];
+        NSLog(@"_responseArr..%@",_responseArr);
+        [friendsTableView reloadData];
+    }
+}
+
+-(void)webRequestFailed:(id)sender{
+    NSLog(@"webRequestFailed");
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

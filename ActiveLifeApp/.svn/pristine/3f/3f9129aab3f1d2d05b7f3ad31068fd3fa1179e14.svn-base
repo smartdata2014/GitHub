@@ -1,0 +1,90 @@
+//
+//  SignUpViewController.m
+//  Active Life App
+//
+//  Created by sdnmacmini10 on 23/06/14.
+//  Copyright (c) 2014 sdnmacmini10. All rights reserved.
+//
+
+#import "SignUpViewController.h"
+
+@interface SignUpViewController ()<UICollectionViewDelegate>
+{
+    IBOutlet UICollectionView *iconsCollectionView;
+}
+-(IBAction)btnSignUpPressed:(id)sender;
+@end
+
+@implementation SignUpViewController
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    UILabel *lblTitle = [[UILabel alloc] initWithFrame:CGRectMake(65, 0, 190, 45)];
+    lblTitle.textAlignment = NSTextAlignmentCenter;
+    lblTitle.text = @"SignUp";
+    lblTitle.textColor = [UIColor whiteColor];
+    self.navigationItem.titleView = lblTitle;
+    // Do any additional setup after loading the view.
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+-(IBAction)btnSignUpPressed:(id)sender{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return 3;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section
+{
+    return 7;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath;
+{
+    static NSString *identifier = @"Cell";
+    UICollectionViewCell *cell = (UICollectionViewCell *)[cv dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
+
+    UIButton *buttonIcons = [[UIButton alloc] initWithFrame:CGRectMake(05, 10, 25, 25)];
+    buttonIcons.tag = indexPath.section *100 + indexPath.row;
+    [buttonIcons setImage:[UIImage imageNamed:@"basketball_icon"] forState:UIControlStateNormal];
+    [buttonIcons addTarget:self action:@selector(btnIconPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.contentView addSubview:buttonIcons];
+    return cell;
+}
+
+-(IBAction)btnIconPressed:(id)sender{
+    NSLog(@"Tag..%i",[sender tag]-100);
+    UIButton *buttonIcons = (UIButton *)[iconsCollectionView viewWithTag:[sender tag]];
+    [buttonIcons setImage:[UIImage imageNamed:@"iron_man"] forState:UIControlStateNormal];
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

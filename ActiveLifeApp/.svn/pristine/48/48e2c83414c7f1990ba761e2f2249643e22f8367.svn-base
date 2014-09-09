@@ -1,0 +1,124 @@
+//
+//  InviteFriendsViewController.m
+//  Active Life App
+//
+//  Created by sdnmacmini10 on 08/08/14.
+//  Copyright (c) 2014 sdnmacmini10. All rights reserved.
+//
+
+#import "InviteFriendsViewController.h"
+
+@interface InviteFriendsViewController ()
+
+@property (nonatomic, strong) NSMutableArray *arrFriends;
+@end
+
+@implementation InviteFriendsViewController
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+    self.navigationController.navigationBarHidden = YES;
+
+    NSString *queryString = [NSString stringWithFormat:@"https://graph.facebook.com/me/friends?access_token=%@",FBSession.activeSession.accessTokenData.accessToken];
+    
+    NSURL *queryStringURL = [NSURL URLWithString:queryString];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:queryStringURL];
+    
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    
+    NSLog(@"Connection obj - %@", connection);
+    
+    // get all friends list who are using this app
+    FBRequest* friendsRequest = [FBRequest requestForMyFriends];
+    [friendsRequest startWithCompletionHandler: ^(FBRequestConnection *connection,
+                                                  NSDictionary* result,
+                                                  NSError *error) {
+        _arrFriends = [result objectForKey:@"data"];
+        NSLog(@"friends..%@",_arrFriends);
+        NSLog(@"Found: %i friends", _arrFriends.count);
+        
+        for (NSDictionary<FBGraphUser>* friend in _arrFriends) {
+            NSLog(@"I have a friend named %@ with id %@", friend.name, friend.id);
+        }
+    }];
+    [FBWebDialogs
+     presentRequestsDialogModallyWithSession:nil
+     message:@"Hey ! Check out this new event social networking app for creating, publishing and managing your events."
+     title:nil
+     parameters:nil
+     handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
+         if (error) {
+             // Error launching the dialog or sending the request.
+             NSLog(@"Error sending request.");
+         } else {
+             if (result == FBWebDialogResultDialogNotCompleted) {
+                 // User clicked the "x" icon
+                 NSLog(@"User canceled request.");
+             } else {
+                 // Handle the send request callback
+                 NSDictionary *urlParams = [self parseURLParams:[resultURL query]];
+                 if (![urlParams valueForKey:@"request"]) {
+                     // User clicked the Cancel button
+                     NSLog(@"User canceled request.");
+                 } else {
+                     // User clicked the Send button
+                     NSString *requestID = [urlParams valueForKey:@"request"];
+                     NSLog(@"Request ID: %@", requestID);
+                 }
+             }
+         }
+     }];
+}
+
+- (NSDictionary*)parseURLParams:(NSString *)query {
+    NSArray *pairs = [query componentsSeparatedByString:@"&"];
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    for (NSString *pair in pairs) {
+        NSArray *kv = [pair componentsSeparatedByString:@"="];
+        NSString *val =
+        [kv[1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        params[kv[0]] = val;
+    }
+    return params;
+}
+
+-(IBAction)btnLogOutPressed:(id)sender{
+    UINavigationController *navController =(UINavigationController *) [UIApplication sharedApplication].keyWindow.rootViewController;
+    [navController popViewControllerAnimated:YES];
+}
+
+-(IBAction)btnMenuPressed:(id)sender{
+    SWRevealViewController *revealController = [self revealViewController];
+    [revealController revealToggle:nil];
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

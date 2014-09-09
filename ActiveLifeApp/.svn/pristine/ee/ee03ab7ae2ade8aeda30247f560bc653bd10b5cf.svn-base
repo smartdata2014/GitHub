@@ -1,0 +1,38 @@
+//
+//  Prefix header
+//
+//  The contents of this file are implicitly included at the beginning of every source file.
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_5_0
+#warning "This project uses features only available in iOS SDK 5.0 and later."
+#endif
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+    #import "AppDelegate.h"
+    #import "LoginViewController.h"
+    #import "SignUpViewController.h"
+    #import "MenuViewController.h"
+    #import "HomeViewController.h"
+    #import "SearchViewController.h"
+    #import "EventDetailsViewController.h"
+    #import "NotificationsViewController.h"
+    #import "AcivitiesViewController.h"
+    #import "CreateEventViewController.h"
+    #import "ProfileViewController.h"
+    #import "FriendsListViewController.h"
+    #import "SWRevealViewController.h"
+    #import "SettingsViewController.h"
+    #import "Helper.h"
+    #import <FacebookSDK/FacebookSDK.h>
+    #import <GoogleMaps/GoogleMaps.h>
+    #import "AlertView.h"
+    #import "MBProgressHUD.h"
+
+#define IS_IPHONE5 (([[UIScreen mainScreen] bounds].size.height-568)?NO:YES)
+
+#endif

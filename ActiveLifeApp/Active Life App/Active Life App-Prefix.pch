@@ -1,0 +1,57 @@
+//
+//  Prefix header
+//
+//  The contents of this file are implicitly included at the beginning of every source file.
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_5_0
+#warning "This project uses features only available in iOS SDK 5.0 and later."
+#endif
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+    #import "AppDelegate.h"
+    #import "LoginViewController.h"
+    #import "SignUpViewController.h"
+    #import "MenuViewController.h"
+    #import "HomeViewController.h"
+    #import "SearchViewController.h"
+    #import "EventDetailsViewController.h"
+    #import "NotificationsViewController.h"
+    #import "MyEventsViewController.h"
+    #import "CreateEventViewController.h"
+    #import "ProfileViewController.h"
+    #import "InviteFriendsViewController.h"
+    #import "Person.h"
+    #import "SWRevealViewController.h"
+    #import "SettingsViewController.h"
+    #import "Helper.h"
+    #import <FacebookSDK/FacebookSDK.h>
+    #import <GoogleMaps/GoogleMaps.h>
+    #import "AlertView.h"
+    #import "CustomAlertView.h"
+    #import "MBProgressHUD.h"
+    #import "WebserviceCall.h"
+    #import "SVProgressHUD.h"
+    #import "PeopleCustomCell.h"
+    #import "FBFriendlistBO.h"
+    #import "MNMBottomPullToRefreshManager.h"
+    #import "MNMBottomPullToRefreshView.h"
+    #import "MyFriendsListViewController.h"
+    #import "FriendRequestViewController.h"
+    #import "FacebookSignUpViewController.h"
+    #import "UIImageView+WebCache.h"
+
+#define IS_IPHONE5 (([[UIScreen mainScreen] bounds].size.height-568)?NO:YES)
+
+#define GOOGLE_API_AUTOCOMPLETE(location) [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/autocomplete/json?input=%@&types=geocode&sensor=false&key=AIzaSyDrRY-DD9T6AQGG-jPRUJLYAEVriFfdDH4",location]
+
+//#define KCustomAlertView CustomAlertView *customAlertView = [[CustomAlertView alloc] initWithTitle:@"Active Life App" message:message];
+
+#define KSECRET_KEY @"ActiveLifeApp"
+#define KAPI_KEY @"ActiveLifeApp"
+
+#endif

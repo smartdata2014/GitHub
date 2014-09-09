@@ -1,0 +1,84 @@
+//
+//  FBFriendlistBO.m
+//  SbScribe
+//
+//  Created by Ramesh on 18/05/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+#import "FBFriendlistBO.h"
+
+@implementation FBFriendlistBO
+
+//@synthesize strfriendId;
+//@synthesize strFriendName;
+//@synthesize strFriendImageUrl;
+//@synthesize strBirthDay;
+//
+//@synthesize imageEvent;
+//@synthesize EventImage;
+
+@synthesize first_name;
+@synthesize id;
+@synthesize last_name;
+@synthesize name;
+@synthesize username;
+@synthesize strFriendImageUrl;
+@synthesize imageEvent;
+
+#pragma mark  for download ImageS  
+
+- (UIImage *)image1
+{
+	return imageEvent;
+}
+
+- (void)setImage:(UIImage *)image
+{
+    //	[imageEvent release];
+	self.imageEvent = image;
+}
+
+-(void)downloadImage
+{
+ 	if (!self.strFriendImageUrl || [self.strFriendImageUrl isEqual:[NSNull null]]) {
+		
+		//imageEvent = [[UIImage imageNamed:@"noimage.png"] retain];
+		return; // No url? Then no Image!
+	}
+	
+	NSError *error = nil;
+	NSString *str = [NSString stringWithFormat:@"%@",self.strFriendImageUrl];
+    str = [str stringByReplacingOccurrencesOfString:@"~" withString:@""];
+	str = [str stringByReplacingOccurrencesOfString:@" " withString:@"%20"];
+    str = [str stringByReplacingOccurrencesOfString:@"&#38;" withString:@"&"];
+	
+	NSURL *url = [NSURL URLWithString:str];
+	if(url)
+	{
+		NSData *imageData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:str] options:3 error:&error];
+		if(!error){
+			imageEvent = [[UIImage alloc]initWithData:imageData];
+        }
+ 		[imageData release];
+	}
+	else
+	{
+		imageEvent = [UIImage imageNamed:@"noimage.png"];
+	}
+}
+
+
+
+-(void)dealloc
+{
+    [first_name release];
+    [last_name release];
+    [name release];
+    [username release];
+    [strFriendImageUrl release];
+    [imageEvent release];
+    [super dealloc];
+}
+
+@end

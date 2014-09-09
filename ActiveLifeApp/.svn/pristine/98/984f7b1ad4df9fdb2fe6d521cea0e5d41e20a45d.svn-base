@@ -1,0 +1,154 @@
+//
+//  SignUpViewController.m
+//  Active Life App
+//
+//  Created by sdnmacmini10 on 23/06/14.
+//  Copyright (c) 2014 sdnmacmini10. All rights reserved.
+//
+
+#import "SignUpViewController.h"
+
+@interface SignUpViewController ()<UICollectionViewDelegate>
+{
+    IBOutlet UICollectionView *iconsCollectionView;
+    IBOutlet UITextField *txtUsername, *txtPassword, *txtConfirmPassword, *txtEmail, *txtAge;
+    IBOutlet UISwitch *maleSwitch, *femaleSwitch;
+}
+@property (strong, nonatomic) NSMutableDictionary *responseDict;
+@property (strong, nonatomic) NSArray *iconsArray;
+-(IBAction)btnSignUpPressed:(id)sender;
+-(IBAction)switchControlPressed:(id)sender;
+@end
+
+@implementation SignUpViewController
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    UILabel *lblTitle = [[UILabel alloc] initWithFrame:CGRectMake(65, 0, 190, 45)];
+    lblTitle.textAlignment = NSTextAlignmentCenter;
+    lblTitle.text = @"SignUp";
+    lblTitle.textColor = [UIColor whiteColor];
+    self.navigationItem.titleView = lblTitle;
+    _responseDict = [[NSMutableDictionary alloc] init];
+    _iconsArray = [[NSArray alloc] initWithObjects:@"archery",@"basketball",@"camel_racingl",@"canoeing",@"car_rallying",@"cricket",@"cycling",@"diving",@"football",@"golf",@"horseriding",@"kayaking",@"polo",@"running",@"sailing",@"rock_climbing",@"soccer",@"swimming",@"tennis",@"volleyball",@"water_skiling",nil];
+    
+//  maleSwitch.on = YES;
+    [self switchControlPressed:nil];
+    
+    // Do any additional setup after loading the view.
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+-(IBAction)btnSignUpPressed:(id)sender{
+    
+    [_responseDict setObject:txtUsername forKey:@"username"];
+    [_responseDict setObject:txtPassword forKey:@"password"];
+    [_responseDict setObject:txtConfirmPassword forKey:@"confirm_password"];
+    [_responseDict setObject:txtEmail forKey:@"email"];
+    [_responseDict setObject:txtAge forKey:@"age"];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return 3;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section
+{
+    return 7;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath;
+{
+    static NSString *identifier = @"Cell";
+    UICollectionViewCell *cell = (UICollectionViewCell *)[cv dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
+    cell.frame = CGRectMake(cell.frame.origin.x-9, cell.frame.origin.y+10, 47, 35);
+    UIButton *buttonIcons = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 47, 35)];
+//    buttonIcons.backgroundColor = [UIColor redColor];
+    buttonIcons.tag = indexPath.section *100 + indexPath.row;
+    [buttonIcons setContentMode:UIViewContentModeScaleAspectFit];
+    [buttonIcons setImage:[UIImage imageNamed:[_iconsArray objectAtIndex:(indexPath.section)*7+indexPath.row]] forState:UIControlStateNormal];
+    [buttonIcons setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@_h",[_iconsArray objectAtIndex:(indexPath.section)*7+indexPath.row]]] forState:UIControlStateSelected];
+    [buttonIcons addTarget:self action:@selector(btnIconPressed:) forControlEvents:UIControlEventTouchDown];
+    
+//    UILabel *labelTitle = [[UILabel alloc] initWithFrame:CGRectMake(05, 23, 35, 10)];
+//    labelTitle.backgroundColor = [UIColor clearColor];
+//    labelTitle.textColor = [UIColor blueColor];
+//    labelTitle.textAlignment = NSTextAlignmentCenter;
+//    labelTitle.font = [UIFont fontWithName:@"Helvetica Light" size:6.0];
+//    labelTitle.text = @"Canal Racing";
+    
+    [cell.contentView addSubview:buttonIcons];
+//    [cell.contentView addSubview:labelTitle];
+    return cell;
+}
+
+-(IBAction)btnIconPressed:(UIButton *)sender{
+    UIButton *buttonIcons = (UIButton *)[iconsCollectionView viewWithTag:[sender tag]];
+    buttonIcons.selected ?[buttonIcons setSelected:NO]:[buttonIcons setSelected:YES];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    [textField resignFirstResponder];
+    return YES;
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    NSLog(@"string..%@",textField.text);
+    return YES;
+}
+
+-(IBAction)switchControlPressed:(id)sender{
+    if ([sender tag]==101) {
+        if (maleSwitch.isOn == 1) {
+            [maleSwitch setOn:YES animated:YES];
+            [femaleSwitch setOn:NO animated:YES];
+        }
+        else {
+            [maleSwitch setOn:NO animated:YES];
+            [femaleSwitch setOn:YES animated:YES];
+        }
+    }
+    else{
+        if (femaleSwitch.isOn == 1) {
+            [maleSwitch setOn:NO animated:YES];
+            [femaleSwitch setOn:YES animated:YES];
+        }
+        else{
+            [maleSwitch setOn:YES animated:YES];
+            [femaleSwitch setOn:NO animated:YES];
+        }
+    }
+    maleSwitch.isOn?[_responseDict setObject:@"Male" forKey:@"Gender"]:[_responseDict setObject:@"Female" forKey:@"Gender"];
+    NSLog(@"_responseDict..%@",_responseDict);
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end
